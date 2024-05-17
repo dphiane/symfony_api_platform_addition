@@ -1,0 +1,114 @@
+[
+  {
+    "name": "Bordeaux \"Cuvée Majeur\" Château Turcaud",
+    "price": 24
+  },
+  {
+    "name": "Crozes-Hermitage Laurent Combier",
+    "price": 29
+  },
+  {
+    "name": "Touraine \"Le Roi Soleil\" Domaine des Espérances",
+    "price": 32
+  },
+  {
+    "name": "Riesling Grand Cru \"Frankstein\" Domaine Charles Frey",
+    "price": 32
+  },
+  {
+    "name": "Macon Milly Lamartine Les Héritiers du Comte Lafon",
+    "price": 35
+  },
+  {
+    "name": "Sancerre \"Les Bonnes Bouches\" Domaine Henri Bourgeois",
+    "price": 35
+  },
+  {
+    "name": "Rully \"Clos la Folie\" Domaine de la Folie",
+    "price": 35
+  },
+  {
+    "name": "Saint-Joseph \"Ro Rée\" Louis Cheze",
+    "price": 39
+  },
+  {
+    "name": "Vouvray \"Haut Lieu\" Domaine Huet",
+    "price": 39
+  },
+  {
+    "name": "Chablis 1er Cru Domaine Bernard Defaix",
+    "price": 39
+  },
+  {
+    "name": "Chassagne Montrachet Château de la Maltroye",
+    "price": 55
+  },
+  {
+    "name": "Meursault \"Les Rougeots\" Vincent Girardin",
+    "price": 65
+  },
+  {
+    "name": "Châteauneuf-du-Pape \"Vieux Télégraphe\" Domaine Vieux Télégraphe",
+    "price": 65
+  },
+  {
+    "name": "Côtes du Rousillon \"Cylia\" Parcé Frères",
+    "price": 24
+  },
+  {
+    "name": "Crozes-Hermitage Laurent Combier",
+    "price": 29
+  },
+  {
+    "name": "Vacqueyras \"Signature\" Domaine Les Amouriers",
+    "price": 29
+  },
+  {
+    "name": "St-Nicolas-de-Bourgueil Domaine de la Cotelleraie",
+    "price": 30
+  },
+  {
+    "name": "Pinot Noir \"Quintessence\" Domaine Charles Frey",
+    "price": 32
+  },
+  {
+    "name": "Saint-Emilion Grand Cru Château Mondorion",
+    "price": 34
+  },
+  {
+    "name": "Rully \"Clos de Bellecroix\" Domaine de la Folie",
+    "price": 35
+  },
+  {
+    "name": "Châteauneuf-du-Pape \"Télégramme\" Domaine Vieux Télégraphe",
+    "price": 39
+  },
+  {
+    "name": "Pomerol Château du Couvent",
+    "price": 44
+  },
+  {
+    "name": "Beaune 1er Cru \"Les Cents Vignes\" Domaine des Croix",
+    "price": 55
+  },
+  {
+    "name": "Côte-Rotie \"Brune et Blonde\" E.Guigal",
+    "price": 65
+  },
+  {
+    "name": "Saint Estèphe Château Haut-Marbuzet",
+    "price": 65
+  },
+  {
+    "name": "Gevrey-Chambertin Henri Pion",
+    "price": 65
+  },
+  {
+    "name": "Volnay 1er Cru Henri Pion",
+    "price": 65
+  },
+  {
+    "name": "Châteauneuf-du-Pape \"Vieux Télégraphe\"",
+    "price": 65
+  }
+]

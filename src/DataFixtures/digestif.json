@@ -1,0 +1,52 @@
+[
+    {
+      "name": "Amaretto Disaronno",
+      "price": 7
+    },
+    {
+      "name": "Armagnac Ducastaing XO",
+      "price": 9
+    },
+    {
+      "name": "Cognac Hennesy",
+      "price": 9
+    },
+    {
+      "name": "Gin",
+      "price": 7
+    },
+    {
+      "name": "Eau de Vie",
+      "flavors": ["Poire Williams", "Mirabelle", "Marc de Gewurztraminer", "Framboise"],
+      "price": 7
+    },
+    {
+      "name": "Rhum Baccardi",
+      "price": 7
+    },
+    {
+      "name": "Diplomatico",
+      "price": 9
+    },
+    {
+      "name": "Vodka",
+      "price": 7
+    },
+    {
+      "name": "Whisky",
+      "price": 7
+    },
+    {
+      "name": "The Hives",
+      "price": 10
+    },
+    {
+      "name": "Oban",
+      "price": 10
+    },
+    {
+      "name": "Peat Chimney",
+      "price": 12
+    }
+  ]
+  

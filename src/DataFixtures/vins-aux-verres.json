@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Chardonnay IGP Henri Pion",
+    "price": 5
+  },
+  {
+    "name": "Gascogne \"Moelleux\" Domaine de Joÿ",
+    "price": 5
+  },
+  {
+    "name": "Gewurztraminer Emile Boeckel",
+    "price": 5
+  },
+  {
+    "name": "Grave Sec Château Piron",
+    "price": 5
+  },
+  {
+    "name": "Anjou \"Terre de Grès\" Château de Bois-Brinson",
+    "price": 7
+  },
+  {
+    "name": "Chablis Domaine Chaude Ecuelle",
+    "price": 7
+  },
+  {
+    "name": "Muscat Paul Ginglinger",
+    "price": 7
+  },
+  {
+    "name": "Merlot Tour de St Preignan",
+    "price": 4
+  },
+  {
+    "name": "Cobières Beauregard Mirouze",
+    "price": 5
+  },
+  {
+    "name": "Bergerac Château Tour des Gendres",
+    "price": 5
+  },
+  {
+    "name": "Montagne Saint-Emilion Château La Bergère",
+    "price": 7
+  },
+  {
+    "name": "Gigondas Domaine Les Goubert",
+    "price": 7
+  },
+  {
+    "name": "Mercurey Domaine Nathalie Theulot",
+    "price": 7
+  },
+
+  {
+    "name": "Pays de l'Herault \"Guilhem\" Moulin de Gassac",
+    "price": 4
+  },
+  {
+    "name": "Rosé Pinot Noir Petit Bourgeois",
+    "price": 5
+  }
+]

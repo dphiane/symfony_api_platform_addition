@@ -1,0 +1,63 @@
+[
+    {
+      "name": "Vittel 50cl",
+      "price": 3
+    },
+    {
+      "name": "Vittel Litre",
+      "price": 4
+    },
+    {
+      "name": "Badoit Verte 50cl",
+      "price": 3
+    },
+    {
+      "name": "Badoit Verte Litre",
+      "price": 4
+    },
+    {
+      "name": "Perrier 33cl",
+      "price": 3.20
+    },
+    {
+      "name": "San Pellegrino 50cl",
+      "price": 3
+    },
+    {
+      "name": "San Pellegrino Litre",
+      "price": 4
+    },
+    {
+      "name": "Limonade 25cl",
+      "price": 2.80
+    },
+    {
+      "name": "Sirop 25cl",
+      "price": 2.50
+    },
+    {
+      "name": "Coca 33cl",
+      "price": 3.20
+    },
+    {
+      "name": "Coca Zero 33cl",
+      "price": 3.20
+    },
+    {
+      "name": "Schweppes 25cl",
+      "price": 3.20
+    },
+    {
+      "name": "Jus de fruit 25cl",
+      "price": 3.20
+    },
+    {
+      "name": "Orangina 25cl",
+      "price": 3.20
+    },
+    {
+      "name": "Nestea 25cl",
+      "price": 3.20
+    }
+  ]
+  

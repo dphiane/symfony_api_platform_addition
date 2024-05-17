@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Apérol Spritz",
+    "price": 5.50
+  },
+  {
+    "name": "Martini Blanc / Rouge 4cl",
+    "price": 3.50
+  },
+  {
+    "name": "Ricard 2cl",
+    "price": 3
+  },
+  {
+    "name": "Kir 12cl",
+    "price": 3.50
+  },
+  {
+    "name": "Kir Royal 12cl",
+    "price": 5
+  },
+  {
+    "name": "Coupe de Crémant 12cl",
+    "price": 4.5
+  },
+  {
+    "name": "Coupe de Champagne 12cl",
+    "price": 8
+  },
+  {
+    "name": "Porto 6cl",
+    "price": 3.50
+  },
+  {
+    "name": "Campari 4cl",
+    "price": 5
+  },
+  {
+    "name": "Bière 25cl",
+    "price": 3
+  },
+  {
+    "name": "Amer 25cl",
+    "price": 3.20
+  },
+  {
+    "name": "Cynar 25cl",
+    "price": 3.20
+  },
+  {
+    "name": "Picon 25cl",
+    "price": 3.20
+  }
+]

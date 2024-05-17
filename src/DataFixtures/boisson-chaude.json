@@ -1,0 +1,31 @@
+[
+    {
+      "name": "Expresso",
+      "price": 1.70
+    },
+    {
+      "name": "Café Rallongé",
+      "price": 1.70
+    },
+    {
+      "name": "Café Crème",
+      "price": 1.90
+    },
+    {
+      "name": "Café Rallongé Crème",
+      "price": 1.90
+    },
+    {
+      "name": "Thé",
+      "price": 3.20
+    },
+    {
+      "name": "Déca",
+      "price": 1.90
+    },
+    {
+      "name": "Déca Crème",
+      "price": 2.10
+    }
+  ]
+  
