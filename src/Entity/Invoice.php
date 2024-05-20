@@ -21,9 +21,6 @@ class Invoice
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $time = null;
-
     /**
      * @var Collection<int, Product>
      */
@@ -31,7 +28,7 @@ class Invoice
     private Collection $products;
 
     #[ORM\Column]
-    private ?float $tva = null;
+    private ?int $tva = null;
 
     #[ORM\Column]
     private ?float $total = null;
@@ -39,7 +36,7 @@ class Invoice
     /**
      * @var Collection<int, Payment>
      */
-    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'invoice')]
+    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'invoice',  cascade: ['persist', 'remove'])]
     private Collection $payment;
 
     public function __construct()
@@ -61,18 +58,6 @@ class Invoice
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getTime(): ?\DateTimeInterface
-    {
-        return $this->time;
-    }
-
-    public function setTime(\DateTimeInterface $time): static
-    {
-        $this->time = $time;
 
         return $this;
     }
@@ -101,12 +86,12 @@ class Invoice
         return $this;
     }
 
-    public function getTva(): ?float
+    public function getTva(): ?int
     {
         return $this->tva;
     }
 
-    public function setTva(float $tva): static
+    public function setTva(int $tva): static
     {
         $this->tva = $tva;
 
