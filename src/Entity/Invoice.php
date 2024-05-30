@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 #[ApiResource]
@@ -18,17 +19,11 @@ class Invoice
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
-
-    /**
-     * @var Collection<int, Product>
-     */
-    #[ORM\ManyToMany(targetEntity: Product::class)]
-    private Collection $products;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?DateTimeInterface $date = null;
 
     #[ORM\Column]
-    private ?int $tva = null;
+    private ?float $tva = null;
 
     #[ORM\Column]
     private ?float $total = null;
@@ -39,10 +34,19 @@ class Invoice
     #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'invoice',  cascade: ['persist', 'remove'])]
     private Collection $payment;
 
+    #[ORM\Column(length: 255)]
+    private ?string $InvoiceNumber = null;
+
+    /**
+     * @var Collection<int, InvoiceProducts>
+     */
+    #[ORM\OneToMany(targetEntity: InvoiceProducts::class, mappedBy: 'invoice', orphanRemoval: true)]
+    private Collection $invoiceProducts;
+
     public function __construct()
     {
-        $this->products = new ArrayCollection();
         $this->payment = new ArrayCollection();
+        $this->invoiceProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -50,48 +54,24 @@ class Invoice
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(DateTimeInterface $date): self
     {
         $this->date = $date;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Product>
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(Product $product): static
-    {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-        }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): static
-    {
-        $this->products->removeElement($product);
-
-        return $this;
-    }
-
-    public function getTva(): ?int
+    public function getTva(): ?float
     {
         return $this->tva;
     }
 
-    public function setTva(int $tva): static
+    public function setTva(float $tva): self
     {
         $this->tva = $tva;
 
@@ -103,7 +83,7 @@ class Invoice
         return $this->total;
     }
 
-    public function setTotal(float $total): static
+    public function setTotal(float $total): self
     {
         $this->total = $total;
 
@@ -118,7 +98,7 @@ class Invoice
         return $this->payment;
     }
 
-    public function addPayment(Payment $payment): static
+    public function addPayment(Payment $payment): self
     {
         if (!$this->payment->contains($payment)) {
             $this->payment->add($payment);
@@ -128,12 +108,54 @@ class Invoice
         return $this;
     }
 
-    public function removePayment(Payment $payment): static
+    public function removePayment(Payment $payment): self
     {
         if ($this->payment->removeElement($payment)) {
             // set the owning side to null (unless already changed)
             if ($payment->getInvoice() === $this) {
                 $payment->setInvoice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInvoiceNumber(): ?string
+    {
+        return $this->InvoiceNumber;
+    }
+
+    public function setInvoiceNumber(string $InvoiceNumber): static
+    {
+        $this->InvoiceNumber = $InvoiceNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InvoiceProducts>
+     */
+    public function getInvoiceProducts(): Collection
+    {
+        return $this->invoiceProducts;
+    }
+
+    public function addInvoiceProduct(InvoiceProducts $invoiceProduct): static
+    {
+        if (!$this->invoiceProducts->contains($invoiceProduct)) {
+            $this->invoiceProducts->add($invoiceProduct);
+            $invoiceProduct->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoiceProduct(InvoiceProducts $invoiceProduct): static
+    {
+        if ($this->invoiceProducts->removeElement($invoiceProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($invoiceProduct->getInvoice() === $this) {
+                $invoiceProduct->setInvoice(null);
             }
         }
 

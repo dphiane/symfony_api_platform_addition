@@ -15,58 +15,40 @@ class Payment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $cash = null;
+    #[ORM\Column(nullable: false)]
+    private ?float $amount = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $creditCard = null;
+    #[ORM\Column(length: 50, nullable: false)]
+    private ?string $paymentMethod = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $restaurantVoucher = null;
-
-    #[ORM\ManyToOne(inversedBy: 'payment')]
+    #[ORM\ManyToOne(inversedBy: 'payments')]
     private ?Invoice $invoice = null;
-
-    #[ORM\Column(nullable:true)]
-    private ?float $bankCheque = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getCash(): ?float
+    public function getAmount(): ?float
     {
-        return $this->cash;
+        return $this->amount;
     }
 
-    public function setCash(float $cash): static
+    public function setAmount(float $amount): static
     {
-        $this->cash = $cash;
+        $this->amount = $amount;
 
         return $this;
     }
 
-    public function getCreditCard(): ?float
+    public function getPaymentMethod(): ?string
     {
-        return $this->creditCard;
+        return $this->paymentMethod;
     }
 
-    public function setCreditCard(?float $creditCard): static
+    public function setPaymentMethod(string $paymentMethod): static
     {
-        $this->creditCard = $creditCard;
-
-        return $this;
-    }
-
-    public function getRestaurantVoucher(): ?float
-    {
-        return $this->restaurantVoucher;
-    }
-
-    public function setRestaurantVoucher(?float $restaurantVoucher): static
-    {
-        $this->restaurantVoucher = $restaurantVoucher;
+        $this->paymentMethod = $paymentMethod;
 
         return $this;
     }
@@ -79,18 +61,6 @@ class Payment
     public function setInvoice(?Invoice $invoice): static
     {
         $this->invoice = $invoice;
-
-        return $this;
-    }
-
-    public function getBankCheque(): ?float
-    {
-        return $this->bankCheque;
-    }
-
-    public function setBankCheque(float $bankCheque): static
-    {
-        $this->bankCheque = $bankCheque;
 
         return $this;
     }
