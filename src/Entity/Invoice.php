@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\InvoiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,6 +14,7 @@ use DateTimeInterface;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
 #[ApiResource]
+#[ApiFilter(DateFilter::class, properties: ['date'])]
 class Invoice
 {
     #[ORM\Id]
@@ -42,6 +45,9 @@ class Invoice
      */
     #[ORM\OneToMany(targetEntity: InvoiceProducts::class, mappedBy: 'invoice', orphanRemoval: true)]
     private Collection $invoiceProducts;
+
+    #[ORM\ManyToOne(inversedBy: 'invoices')]
+    private ?CashRegisterJournal $cashRegisterJournal = null;
 
     public function __construct()
     {
@@ -158,6 +164,18 @@ class Invoice
                 $invoiceProduct->setInvoice(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCashRegisterJournal(): ?CashRegisterJournal
+    {
+        return $this->cashRegisterJournal;
+    }
+
+    public function setCashRegisterJournal(?CashRegisterJournal $cashRegisterJournal): static
+    {
+        $this->cashRegisterJournal = $cashRegisterJournal;
 
         return $this;
     }

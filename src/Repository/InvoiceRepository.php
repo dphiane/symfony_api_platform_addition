@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use DateTimeInterface;
 use App\Entity\Invoice;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Invoice>
@@ -20,6 +21,28 @@ class InvoiceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Invoice::class);
     }
+
+    public function findInvoicesBetweenDates(DateTimeInterface $startDate, DateTimeInterface $endDate)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.date >= :startDate')
+            ->andWhere('i.date <= :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->orderBy('i.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+    public function findInvoicesFromDate(DateTimeInterface $startDate)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.date >= :startDate')
+            ->setParameter('startDate', $startDate)
+            ->orderBy('i.date', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+    
 
     //    /**
     //     * @return Invoice[] Returns an array of Invoice objects
