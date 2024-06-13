@@ -3,3 +3,10 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+api_login_check:
+    path: /api/login_check
+    methods: [POST]
+    defaults:
+        _controller: lexik_jwt_authentication.controller.login_check
+        _format: json
