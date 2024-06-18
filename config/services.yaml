@@ -20,6 +20,12 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\EventSubscriber\ForgotPasswordEventSubscriber:
+        arguments:
+            $tokenStorage: '@security.token_storage'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+            
     Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface: '@lexik_jwt_authentication.jwt_manager'
     Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface: '@security.token_storage'
     # add more service definitions when explicit configuration is needed

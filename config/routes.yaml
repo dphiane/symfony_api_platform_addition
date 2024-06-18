@@ -10,3 +10,8 @@ api_login_check:
     defaults:
         _controller: lexik_jwt_authentication.controller.login_check
         _format: json
+        
+change_password:
+    path: /api/change_password
+    controller: App\Controller\ChangePasswordController::changePassword
+    methods: [POST]
