@@ -2,18 +2,39 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use DateTimeInterface;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
+use Doctrine\DBAL\Types\Types;
+use ApiPlatform\Metadata\Delete;
+use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\InvoiceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
-use DateTimeInterface;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use App\Controller\InvoiceController;
+use App\Dto\CreateInvoiceInput;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: InvoiceRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Put(),
+        new Post(
+            name: 'create_invoice',
+            uriTemplate: 'create_invoice',
+            controller: InvoiceController::class,
+            input:CreateInvoiceInput::class
+        ),
+        new Delete(),
+        new Post()
+    ]
+)]
 #[ApiFilter(DateFilter::class, properties: ['date'])]
 class Invoice
 {
@@ -45,9 +66,6 @@ class Invoice
      */
     #[ORM\OneToMany(targetEntity: InvoiceProducts::class, mappedBy: 'invoice', orphanRemoval: true)]
     private Collection $invoiceProducts;
-
-    #[ORM\ManyToOne(inversedBy: 'invoices')]
-    private ?CashRegisterJournal $cashRegisterJournal = null;
 
     public function __construct()
     {
@@ -164,18 +182,6 @@ class Invoice
                 $invoiceProduct->setInvoice(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCashRegisterJournal(): ?CashRegisterJournal
-    {
-        return $this->cashRegisterJournal;
-    }
-
-    public function setCashRegisterJournal(?CashRegisterJournal $cashRegisterJournal): static
-    {
-        $this->cashRegisterJournal = $cashRegisterJournal;
 
         return $this;
     }

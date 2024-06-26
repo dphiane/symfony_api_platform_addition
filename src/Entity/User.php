@@ -3,16 +3,88 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\UserRepository;
+use ApiPlatform\Metadata\Post;
+use App\Controller\ChangePasswordController;
+use App\Controller\RegistrationController;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[ApiResource]
+#[
+    ApiResource(
+        operations: [
+            new Post(
+                name: 'api_register',
+                uriTemplate: 'register',
+                controller: RegistrationController::class,
+                openapiContext: [
+                    "requestBody" => [
+                        "required" => true,
+                        'content' => [
+                            "application/ld+json" => [
+                                "schema" => [
+                                    "type" => "object",
+                                    "properties" => [
+                                        "password" => [
+                                            "type" => "string",
+                                            "example" => "Mot de passe",
+                                            "minLength" => 6,
+                                            "maxLength" => 50
+                                        ],
+                                        "userEmail" => [
+                                            "type" => "string",
+                                            "example" => "example@example.com"
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ),
+            new Post(
+                name: 'api_change_password',
+                uriTemplate: 'change_password',
+                controller: ChangePasswordController::class,
+                openapiContext: [
+                    "summary" => "Si l'utilisateur est connecté et souhaite changer de mot de passe",
+                    "description" => "Change le mot de passe",
+                    "requestBody" => [
+                        "required" => true,
+                        'content' => [
+                            "application/ld+json" => [
+                                "schema" => [
+                                    "type" => "object",
+                                    "properties" => [
+                                        "currentPassword" => [
+                                            "type" => "string",
+                                            "example" => "Mot de passe actuel"
+                                        ],
+                                        "newPassword" => [
+                                            "type" => "string",
+                                            "example" => "nouveau mot de passe",
+                                            "minLength" => 6,
+                                            "maxLength" => 50
+                                        ],
+                                        "userEmail" => [
+                                            "type" => "string",
+                                            "example" => "example@example.com"
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            )
+        ]
+    )
+]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

@@ -2,12 +2,23 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
+use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PaymentRepository;
-use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\GetCollection;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
-#[ApiResource]
+#[ApiResource(    operations: [
+    new Get(),
+    new GetCollection(),
+    new Put(),
+    new Post(),
+    new Delete(),
+])]
 class Payment
 {
     #[ORM\Id]
@@ -21,7 +32,7 @@ class Payment
     #[ORM\Column(length: 50, nullable: false)]
     private ?string $paymentMethod = null;
 
-    #[ORM\ManyToOne(inversedBy: 'payments')]
+    #[ORM\ManyToOne(inversedBy: 'payment', targetEntity: Invoice::class)]
     private ?Invoice $invoice = null;
 
     public function getId(): ?int

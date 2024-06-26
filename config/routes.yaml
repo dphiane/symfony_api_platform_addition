@@ -15,3 +15,4 @@ change_password:
     path: /api/change_password
     controller: App\Controller\ChangePasswordController::changePassword
     methods: [POST]
+

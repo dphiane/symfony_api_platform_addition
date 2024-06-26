@@ -7,60 +7,73 @@ use DateTimeImmutable;
 use App\Entity\Invoice;
 use App\Entity\Payment;
 use App\Entity\Product;
+use App\Dto\CreateInvoiceInput;
 use App\Entity\InvoiceProducts;
 use App\Service\InvoiceNumberGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class InvoiceController extends AbstractController
 {
-    #[Route('/api/create_invoice', name: 'create_invoice', methods: ['POST'])]
-    public function createInvoice(Request $request, EntityManagerInterface $entityManager,InvoiceNumberGenerator $invoiceNumberGenerator): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private InvoiceNumberGenerator $invoiceNumberGenerator,
+        private SerializerInterface $serializer,
+        private ValidatorInterface $validator // Injection du ValidatorInterface
+    ) {
+    }
 
-        if (!isset($data['tva'], $data['total'], $data['products'], $data['payments'])) {
-            return new JsonResponse(['status' => 'Invalid data'], JsonResponse::HTTP_BAD_REQUEST);
+    public function __invoke(Request $request): JsonResponse
+    {
+        // Désérialisation des données JSON en utilisant le DTO
+        $createInvoiceInput = $this->serializer->deserialize($request->getContent(), CreateInvoiceInput::class, 'json');
+        dump($createInvoiceInput);
+        // Validation du DTO
+        $violations = $this->validator->validate($createInvoiceInput);
+        if (count($violations) > 0) {
+            $errorMessages = [];
+            foreach ($violations as $violation) {
+                $errorMessages[$violation->getPropertyPath()] = $violation->getMessage();
+            }
+            return new JsonResponse(['status' => 'Invalid data', 'errors' => $errorMessages], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $invoice = new Invoice();
         $invoice->setDate(new DateTimeImmutable("now", new DateTimeZone('Europe/Paris')));
-        $invoice->setTva($data['tva']);
-        $invoice->setTotal($data['total']);
-        $invoice->setInvoiceNumber($invoiceNumberGenerator->generate());
-        // Add products to the invoice
-        foreach ($data['products'] as $productData) {
-            if (!isset($productData['id'], $productData['quantity'])) {
-                continue;
+        $invoice->setTva($createInvoiceInput->tva);
+        $invoice->setTotal($createInvoiceInput->total);
+        $invoice->setInvoiceNumber($this->invoiceNumberGenerator->generate());
+
+        // Ajout des produits à la facture
+        foreach ($createInvoiceInput->products as $productInput) {
+            $product = $this->entityManager->getRepository(Product::class)->find($productInput->id);
+
+            if (!$product) {
+                return new JsonResponse(['status' => 'Product not found for ID: ' . $productInput->id], JsonResponse::HTTP_BAD_REQUEST);
             }
-            $product = $entityManager->getRepository(Product::class)->find($productData['id']);
-            if ($product) {
-                $invoiceProduct = new InvoiceProducts();
-                $invoiceProduct->setProduct($product);
-                $invoiceProduct->setQuantity($productData['quantity']);
-                $invoice->addInvoiceProduct($invoiceProduct);
-                $entityManager->persist($invoiceProduct);
-            }
+
+            $invoiceProduct = new InvoiceProducts();
+            $invoiceProduct->setProduct($product);
+            $invoiceProduct->setQuantity($productInput->quantity);
+            $invoice->addInvoiceProduct($invoiceProduct);
+            $this->entityManager->persist($invoiceProduct);
         }
 
-        // Add payments to the invoice
-        $payments = $data['payments'];
-        
-        foreach ($payments as $paymentData) {
+        // Ajout des paiements à la facture
+        foreach ($createInvoiceInput->payments as $paymentInput) {
             $payment = new Payment();
-            $payment->setAmount($paymentData['amount']);
-            $payment->setPaymentMethod($paymentData['paymentMethod']);
-            $payment->setInvoice($invoice); // Associe la facture à ce paiement
-            $entityManager->persist($payment);
+            $payment->setAmount($paymentInput->amount);
+            $payment->setPaymentMethod($paymentInput->paymentMethod);
             $payment->setInvoice($invoice);
-            $entityManager->persist($payment);
+            $this->entityManager->persist($payment);
         }
 
-        $entityManager->persist($invoice);
-        $entityManager->flush();
+        $this->entityManager->persist($invoice);
+        $this->entityManager->flush();
 
         return new JsonResponse(['status' => 'Invoice created!'], JsonResponse::HTTP_CREATED);
     }

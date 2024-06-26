@@ -2,18 +2,19 @@
 
 namespace App\Controller;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[ApiResource()]
 class ProductsController extends AbstractController
 {
-    #[Route('api/multiple', name: 'get_multiple_products',methods:'GET')]
-    public function index(Request $request, ProductRepository $productRepository): JsonResponse
+    public function __construct(
+        private ProductRepository $productRepository
+    ) {
+    }
+
+    public function __invoke(Request $request):JsonResponse
     {
         $ids = $request->query->get('ids');
 
@@ -22,8 +23,8 @@ class ProductsController extends AbstractController
         }
 
         $idsArray = explode(',', $ids);
-        $products = $productRepository->findByIds($idsArray);
+        $products = $this->productRepository->findByIds($idsArray);
 
-        return $this->json($products);
+        return $this->json($products); 
     }
 }

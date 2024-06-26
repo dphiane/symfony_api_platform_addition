@@ -10,19 +10,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/api/register', name: 'api_register', methods: ['POST'])]
-    public function register(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher,
-        JWTTokenManagerInterface $jwtManager,
-        TokenStorageInterface $tokenStorage
-    ): JsonResponse {
+    public function __construct(
+        private        EntityManagerInterface $entityManager,
+        private UserPasswordHasherInterface $passwordHasher,
+        private JWTTokenManagerInterface $jwtManager,
+        private TokenStorageInterface $tokenStorage
+    ) {
+    }
+    public function __invoke(Request $request,): JsonResponse
+    {
         $data = json_decode($request->getContent(), true);
 
         $email = $data['email'] ?? null;
@@ -34,16 +34,16 @@ class RegistrationController extends AbstractController
 
         $user = new User();
         $user->setEmail($email);
-        $user->setPassword($passwordHasher->hashPassword($user, $password));
+        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
         // Créez un jeton de sécurité pour le nouvel utilisateur
         $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
-        $tokenStorage->setToken($token);
+        $this->tokenStorage->setToken($token);
 
         // Générer un jeton JWT pour l'utilisateur
-        $jwt = $jwtManager->create($user);
+        $jwt = $this->jwtManager->create($user);
 
         return new JsonResponse(['token' => $jwt], JsonResponse::HTTP_CREATED);
     }

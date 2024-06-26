@@ -5,10 +5,42 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\ProductsController;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    paginationItemsPerPage: 1000
+    paginationItemsPerPage: 1000,
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Put(),
+        new Post(),
+        new Delete(),
+        new Get(
+            uriTemplate: 'multiple',
+            name: 'multiple_products',
+            controller: ProductsController::class,
+            openapiContext: [
+                "summary" => "Permets d'avoir plusieurs products en fonction de leurs Id",
+                'description' => "Returns a list of products based on the provided IDs",
+                'parameters' => [
+                    [
+                        "name" => 'ids',
+                        "in" => "query",
+                        'schema' => [
+                            "type" => "string",
+                            "example" => "1,2,3"
+                        ]
+                    ]
+                ]
+            ]
+        )
+    ]
 )]
 class Product
 {
