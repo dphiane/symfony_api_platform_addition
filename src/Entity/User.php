@@ -36,7 +36,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
                                             "minLength" => 6,
                                             "maxLength" => 50
                                         ],
-                                        "userEmail" => [
+                                        "email" => [
                                             "type" => "string",
                                             "example" => "example@example.com"
                                         ]
