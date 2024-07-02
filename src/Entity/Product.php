@@ -24,7 +24,6 @@ use App\Controller\ProductsController;
         new Get(
             uriTemplate: 'multiple',
             name: 'multiple_products',
-            controller: ProductsController::class,
             openapiContext: [
                 "summary" => "Permets d'avoir plusieurs products en fonction de leurs Id",
                 'description' => "Returns a list of products based on the provided IDs",
