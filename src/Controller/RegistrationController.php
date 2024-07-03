@@ -36,12 +36,10 @@ class RegistrationController extends AbstractController
         $user = new User();
         $user->setEmail($email);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
-        $user->setRoles(['ROLE_USER']); // Assurez-vous que les rôles sont définis
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        // Vérifiez que l'utilisateur est bien persisté
         if (!$user->getId()) {
             return new JsonResponse(['error' => 'Utilisateur non enregistré'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -52,9 +50,6 @@ class RegistrationController extends AbstractController
 
         // Générer un jeton JWT pour l'utilisateur
         $jwt = $this->jwtManager->create($user);
-
-        // Ajoutez un log pour vérifier le JWT
-        error_log('JWT: ' . $jwt);
 
         if (!$jwt) {
             return new JsonResponse(['error' => 'Échec de la génération du token JWT'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
