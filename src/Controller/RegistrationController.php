@@ -15,13 +15,14 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class RegistrationController extends AbstractController
 {
     public function __construct(
-        private        EntityManagerInterface $entityManager,
+        private EntityManagerInterface $entityManager,
         private UserPasswordHasherInterface $passwordHasher,
         private JWTTokenManagerInterface $jwtManager,
         private TokenStorageInterface $tokenStorage
     ) {
     }
-    public function __invoke(Request $request,): JsonResponse
+
+    public function __invoke(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -35,15 +36,29 @@ class RegistrationController extends AbstractController
         $user = new User();
         $user->setEmail($email);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+        $user->setRoles(['ROLE_USER']); // Assurez-vous que les rôles sont définis
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
+        // Vérifiez que l'utilisateur est bien persisté
+        if (!$user->getId()) {
+            return new JsonResponse(['error' => 'Utilisateur non enregistré'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         // Créez un jeton de sécurité pour le nouvel utilisateur
         $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
         $this->tokenStorage->setToken($token);
 
         // Générer un jeton JWT pour l'utilisateur
         $jwt = $this->jwtManager->create($user);
+
+        // Ajoutez un log pour vérifier le JWT
+        error_log('JWT: ' . $jwt);
+
+        if (!$jwt) {
+            return new JsonResponse(['error' => 'Échec de la génération du token JWT'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         return new JsonResponse(['token' => $jwt], JsonResponse::HTTP_CREATED);
     }
