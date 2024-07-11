@@ -31,7 +31,6 @@ class InvoiceController extends AbstractController
     {
         // Désérialisation des données JSON en utilisant le DTO
         $createInvoiceInput = $this->serializer->deserialize($request->getContent(), CreateInvoiceInput::class, 'json');
-        dump($createInvoiceInput);
         // Validation du DTO
         $violations = $this->validator->validate($createInvoiceInput);
         if (count($violations) > 0) {
